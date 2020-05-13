@@ -33,7 +33,7 @@ How To Use
   docker-compose up -d
   ```
   
- - 所有服务的数据默认挂载的 /home 下面的各自文件夹内。
+ - 所有服务的数据默认挂载的 /home 下面的各自文件夹内，并且会自动生成。
    ```
    /home
       ├── confluence
@@ -45,5 +45,6 @@ How To Use
       └── postgresql
    ```
  
- - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去。
+ - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去，conf.d 为Nginx的配置，需要手动拷贝过去。
+ 
  - 使用时需要根据个人需求，修改docker-compose 和 conf.d 里的二级域名。
