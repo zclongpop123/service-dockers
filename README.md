@@ -32,3 +32,8 @@ How To Use
   ```bash
   docker-compose up -d
   ```
+  
+  
+ - 所有服务的数据默认挂载的 /home 下面的各自文件夹内。
+ - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去。
+ - 使用时需要根据个人需求，修改docker-compose 和 conf.d 里的二级域名。
