@@ -43,7 +43,25 @@ services:
     
     
     
-    
+    mongo:
+        container_name: MongoDB
+                
+        image: mongo:3.2.18
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.19.0.4
+        
+        volumes:
+            - /home/mongo/db:/data/db
+            - /home/mongo/configdb:/data/configdb
+
+        ports:
+            - '27017:27017'
+
+
+
     nginx:
         container_name: Nginx
         
@@ -168,7 +186,7 @@ services:
             - /home/gitlab/config:/etc/gitlab
             - /home/gitlab/log:/var/log/gitlab
             - /home/gitlab/data:/var/opt/gitlab
-        
+
         ports:
             - '2022:22'
             #- '20080:80'
