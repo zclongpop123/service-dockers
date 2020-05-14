@@ -46,13 +46,17 @@ services:
     mongo:
         container_name: MongoDB
                 
-        image: mongo:3.2.18
+        image: mongo:latest
         restart: unless-stopped
 
         networks:
             extnetwork:
                 ipv4_address: 172.19.0.4
         
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+
         volumes:
             - /home/mongo/db:/data/db
             - /home/mongo/configdb:/data/configdb
@@ -243,6 +247,25 @@ services:
         #ports:
         #    - '19999:19999'
 
+
+    mongo-express:
+        container_name: MongoExpress
+
+        image: mongo-express
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.19.0.12
+
+        environment:
+            ME_CONFIG_MONGODB_SERVER: mongo
+            ME_CONFIG_MONGODB_PORT: 27017
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: example
+
+        #ports:
+        #    - 8081:8081
 
 
 networks:
