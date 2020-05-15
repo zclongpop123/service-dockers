@@ -268,6 +268,61 @@ services:
         #    - 8081:8081
 
 
+    #- Shotgun
+    sg-memcached:
+        container_name: Shotgun-Memcached
+ 
+        image: memcached:1.4
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.19.0.13
+
+
+    sg-app:
+        container_name: Shotgun-App
+        
+        image: shotgun-app:8.5.0.2398
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.19.0.14
+                aliases:
+                    - test-shotgun.ds.com
+
+        #ports:
+        #    - "<network_interface_ip>:80:80"
+
+        environment:
+            SHOTGUN_SITE_URL: test-shotgun.ds.com
+            POSTGRES_HOST: postgres96
+            POSTGRES_DB: shotgun_db
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: shotgun_db_user
+            POSTGRES_PASSWORD: zcl.123
+            MEMCACHED_HOST: sg-memcached
+            MEMCACHED_PORT: 11211
+
+        labels:
+            com.shotgunsoftware.component: app
+
+        volumes:
+            - /home/shotgun/media:/media
+
+        depends_on:
+            - sg-memcached
+            - postgres96
+
+        logging:
+            driver: "json-file"
+    
+            options:
+                max-size: "2g"
+                max-file: "20"
+
+
 networks:
     extnetwork:
         driver: bridge
