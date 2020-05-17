@@ -293,7 +293,7 @@ services:
                     - test-shotgun.ds.com
 
         #ports:
-        #    - "<network_interface_ip>:80:80"
+        #    - '80:80'
 
         environment:
             SHOTGUN_SITE_URL: test-shotgun.ds.com
@@ -321,6 +321,68 @@ services:
             options:
                 max-size: "2g"
                 max-file: "20"
+
+
+
+    sg-transcoder-server:
+        container_name: Shotgun-Transcoder-Server
+        
+        image: shotgun-transcoder-server:%TCSERVER_VERSION%
+        restart: always
+        
+        networks:
+            extnetwork:
+                ipv4_address: 172.19.0.15
+                
+        environment:
+            POSTGRES_HOST: postgres96
+            POSTGRES_DB: shotgun_transcoding
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: shotgun
+            POSTGRES_PASSWORD: zcl.123
+            DASHBOARD_USERNAME: admin
+            DASHBOARD_PASSWORD: zcl.123
+        
+        labels:
+            com.shotgunsoftware.component: transcoderserver
+    
+        depends_on:
+            - postgres96
+    
+        #ports:
+        #    - '8008:80'
+
+
+
+    sg-transcoder-worker:
+        container_name: Shotgun-Transcoder-Worker
+        
+        image: shotgun-transcoder-worker:%TCWORKER_VERSION%
+        restart: always
+        
+        networks:
+            extnetwork:
+                ipv4_address: 172.19.0.16
+
+        environment:
+            POSTGRES_HOST: postgres96
+            POSTGRES_DB: shotgun_transcoding
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: shotgun
+            POSTGRES_PASSWORD: zcl.123
+        
+        labels:
+            com.shotgunsoftware.component: transcoderworker
+        
+        depends_on:
+            - postgres96
+
+        volumes:
+        - ./media:/media
+
+     
+
+
 
 
 networks:
