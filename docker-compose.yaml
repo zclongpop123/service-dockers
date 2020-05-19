@@ -110,8 +110,8 @@ services:
             - ATL_PROXY_NAME=jira.ds.com
             - ATL_PROXY_PORT=80
 
-        ports:
-            - '8080:8080'
+        #ports:
+        #    - '8080:8080'
 
 
 
@@ -239,10 +239,10 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock:ro
         
         cap_add:
-          - SYS_PTRACE
+            - SYS_PTRACE
         
         security_opt:
-          - apparmor:unconfined
+            - apparmor:unconfined
 
         #ports:
         #    - '19999:19999'
@@ -310,6 +310,7 @@ services:
 
         volumes:
             - /home/shotgun/media:/media
+            - /home/shotgun/rb:/var/rails/shotgun/current/script/rb
 
         depends_on:
             - sg-memcached
@@ -327,8 +328,8 @@ services:
     sg-transcoder-server:
         container_name: Shotgun-Transcoder-Server
         
-        image: shotgun-transcoder-server:%TCSERVER_VERSION%
-        restart: always
+        image: shotgun-transcoder-server:6.3.0
+        restart: unless-stopped
         
         networks:
             extnetwork:
@@ -338,10 +339,10 @@ services:
             POSTGRES_HOST: postgres96
             POSTGRES_DB: shotgun_transcoding
             POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun
+            POSTGRES_USER: shotgun_db_user
             POSTGRES_PASSWORD: zcl.123
             DASHBOARD_USERNAME: admin
-            DASHBOARD_PASSWORD: zcl.123
+            DASHBOARD_PASSWORD: admin
         
         labels:
             com.shotgunsoftware.component: transcoderserver
@@ -357,8 +358,8 @@ services:
     sg-transcoder-worker:
         container_name: Shotgun-Transcoder-Worker
         
-        image: shotgun-transcoder-worker:%TCWORKER_VERSION%
-        restart: always
+        image: shotgun-transcoder-worker:10.4.0
+        restart: unless-stopped
         
         networks:
             extnetwork:
@@ -368,7 +369,7 @@ services:
             POSTGRES_HOST: postgres96
             POSTGRES_DB: shotgun_transcoding
             POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun
+            POSTGRES_USER: shotgun_db_user
             POSTGRES_PASSWORD: zcl.123
         
         labels:
@@ -378,7 +379,7 @@ services:
             - postgres96
 
         volumes:
-        - ./media:/media
+            - /home/shotgun/media:/media
 
      
 
