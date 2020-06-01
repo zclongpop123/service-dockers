@@ -10,7 +10,7 @@ services:
         
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.2
+                ipv4_address: 172.20.0.2
 
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
@@ -30,7 +30,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.3
+                ipv4_address: 172.20.0.3
 
         volumes:
             - /home/postgresql/data:/var/lib/postgresql/data
@@ -51,7 +51,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.4
+                ipv4_address: 172.20.0.4
         
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
@@ -74,7 +74,7 @@ services:
         
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.5
+                ipv4_address: 172.20.0.5
         
         volumes:
             - /home/nginx/conf.d:/etc/nginx/conf.d
@@ -98,7 +98,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.6
+                ipv4_address: 172.20.0.6
 
         volumes:
             - /home/jira:/var/atlassian/application-data/jira
@@ -127,7 +127,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.7
+                ipv4_address: 172.20.0.7
 
         volumes:
             - /home/confluence:/var/atlassian/application-data/confluence
@@ -145,37 +145,6 @@ services:
 
 
 
-    bitbucket:
-        container_name: Bitbucket
-        user: '2003:2003'
-
-        image: atlassian/bitbucket-server:latest
-        restart: unless-stopped
-
-        depends_on:
-            - postgres96
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.19.0.8
-
-        volumes:
-            - /home/bitbucket:/var/atlassian/application-data/bitbucket
-
-        environment:
-            - JVM_MINIMUM_MEMORY=1024m
-            - JVM_MAXIMUM_MEMORY=16384m
-        
-            - ATL_PROXY_NAME=bitbucket.ds.com
-            - ATL_PROXY_PORT=80
-
-        ports:
-            - '7990:7990'
-            - '7999:7999'
-
-
-
-
     gitlab:
         container_name: Gitlab
 
@@ -184,7 +153,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.9
+                ipv4_address: 172.20.0.9
 
         volumes:
             - /home/gitlab/config:/etc/gitlab
@@ -207,7 +176,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.10
+                ipv4_address: 172.20.0.10
         
         volumes:
             - /home/rabbitmq/data:/var/lib/rabbitmq
@@ -231,7 +200,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.11
+                ipv4_address: 172.20.0.11
         
         volumes:
             - /proc:/host/proc:ro
@@ -256,7 +225,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.12
+                ipv4_address: 172.20.0.12
 
         environment:
             ME_CONFIG_MONGODB_SERVER: mongo
@@ -268,127 +237,29 @@ services:
         #    - 8081:8081
 
 
-    #- Shotgun
-    sg-memcached:
-        container_name: Shotgun-Memcached
- 
-        image: memcached:1.4
+
+    filebrowser:
+        container_name: FileBrowser
+
+        image: filebrowser/filebrowser
         restart: unless-stopped
 
         networks:
             extnetwork:
-                ipv4_address: 172.19.0.13
-
-
-    sg-app:
-        container_name: Shotgun-App
+                ipv4_address: 172.20.0.13
         
-        image: shotgun-app:8.5.0.2398
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.19.0.14
-                aliases:
-                    - test-shotgun.ds.com
+        volumes:
+            - /home/filebrowser/config.json:/etc/config.json
+            - /home/filebrowser/database.db:/etc/database.db
+            - /mnt:/srv
 
         #ports:
-        #    - '80:80'
-
-        environment:
-            SHOTGUN_SITE_URL: test-shotgun.ds.com
-            POSTGRES_HOST: postgres96
-            POSTGRES_DB: shotgun_db
-            POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun_db_user
-            POSTGRES_PASSWORD: zcl.123
-            MEMCACHED_HOST: sg-memcached
-            MEMCACHED_PORT: 11211
-
-        labels:
-            com.shotgunsoftware.component: app
-
-        volumes:
-            - /home/shotgun/media:/media
-            - /home/shotgun/rb:/var/rails/shotgun/current/script/rb
-
-        depends_on:
-            - sg-memcached
-            - postgres96
-
-        logging:
-            driver: "json-file"
-    
-            options:
-                max-size: "2g"
-                max-file: "20"
-
-
-
-    sg-transcoder-server:
-        container_name: Shotgun-Transcoder-Server
+        #    - 80:80
         
-        image: shotgun-transcoder-server:6.3.0
-        restart: unless-stopped
-        
-        networks:
-            extnetwork:
-                ipv4_address: 172.19.0.15
-                
-        environment:
-            POSTGRES_HOST: postgres96
-            POSTGRES_DB: shotgun_transcoding
-            POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun_db_user
-            POSTGRES_PASSWORD: zcl.123
-            DASHBOARD_USERNAME: admin
-            DASHBOARD_PASSWORD: admin
-        
-        labels:
-            com.shotgunsoftware.component: transcoderserver
-    
-        depends_on:
-            - postgres96
-    
-        #ports:
-        #    - '8008:80'
-
-
-
-    sg-transcoder-worker:
-        container_name: Shotgun-Transcoder-Worker
-        
-        image: shotgun-transcoder-worker:10.4.0
-        restart: unless-stopped
-        
-        networks:
-            extnetwork:
-                ipv4_address: 172.19.0.16
-
-        environment:
-            POSTGRES_HOST: postgres96
-            POSTGRES_DB: shotgun_transcoding
-            POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun_db_user
-            POSTGRES_PASSWORD: zcl.123
-        
-        labels:
-            com.shotgunsoftware.component: transcoderworker
-        
-        depends_on:
-            - postgres96
-
-        volumes:
-            - /home/shotgun/media:/media
-
-     
-
-
-
 
 networks:
     extnetwork:
         driver: bridge
         ipam:
             config:
-                - subnet: 172.19.0.0/16
+                - subnet: 172.20.0.0/16
