@@ -257,6 +257,27 @@ services:
         #    - 80:80
         
 
+    shotgun-event:
+        container_name: ShotgunEvent
+
+        image: shotgun-event
+        restart: unless-stopped
+
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.0.14
+
+        volumes:
+            - /home/pipeline/shotgunEventDaemon:/home/pipeline/shotgunEventDaemon
+            - /home/pipeline/shotgunEventDaemon/shotgunEvents/src/:/usr/src/myapp
+
+        working_dir: /usr/src/myapp
+
+        entrypoint: ["python", "shotgunEventDaemon.py", "foreground"]
+
+
+
 networks:
     extnetwork:
         driver: bridge
