@@ -26,7 +26,7 @@ How To Use
   docker-compose --version
   ```
 
-- 自己创建或者下载本仓库里的docke-compose.yml
+- 自己创建或者下载本仓库里的docke-compose.yml, 选择修改docker-compose.yaml里对应的域名
 
 - 运行镜像服务
   ```bash
@@ -44,7 +44,14 @@ How To Use
       ├── portainer
       └── postgresql
    ```
+ 如果wiki 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
  
- - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去，conf.d 为Nginx的配置，需要手动拷贝过去。
+ - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去，conf.d 为Nginx的配置，需要手动拷贝过去，conf.d 里的二级域名，然后重启Nginx或者重新加载Nginx配置
+ ```
+ docker-compose restart nginx
+ ```
+ 或者
+ ```
+ nginx -s reload
+ ```
  
- - 使用时需要根据个人需求，修改docker-compose 和 conf.d 里的二级域名。
