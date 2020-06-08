@@ -1,7 +1,7 @@
 How To Use
 ===
 
-- 安装 docker
+- 安装 docker 并启动Docker服务
   ```bash
   yum install docker -y
   
@@ -40,9 +40,9 @@ How To Use
       ├── gitlab
       ├── lost+found
       ├── nginx
-      ├── pipeline
       ├── portainer
-      └── postgresql
+      ├── postgresql
+      └── ...
    ```
  如果wiki 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
  
