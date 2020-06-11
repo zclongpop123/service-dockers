@@ -290,6 +290,139 @@ services:
 
 
 
+    sg-memcached:
+        container_name: Shotgun-Memcached
+
+        image: memcached:1.4
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.0.16
+
+
+    sg-app:
+        container_name: Shotgun-App
+
+        image: shotgun-app:8.8.0.3275
+        restart: unless-stopped
+
+        environment:
+            SHOTGUN_SITE_URL: test-shotgun.ds.com
+            POSTGRES_HOST: postgres96
+            POSTGRES_DB: shotgun_db
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: shotgun_db_user
+            POSTGRES_PASSWORD: zcl.123
+            MEMCACHED_HOST: sg-memcached
+            MEMCACHED_PORT: 11211
+
+        labels:
+            com.shotgunsoftware.component: app
+
+        volumes:
+            - /home/shotgun/media:/media
+            - /home/shotgun/rb:/var/rails/shotgun/current/script/rb
+
+        depends_on:
+            - sg-memcached
+            - postgres96
+
+        logging:
+            driver: "json-file"
+
+            options:
+                max-size: "2g"
+                max-file: "20"
+        
+        ports:
+            - "9000:80"
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.0.17
+                aliases:
+                    - test-shotgun.ds.com
+
+
+    sg-dbops:
+        image: postgres:9.6
+
+        command: ["/bin/bash"]
+        stdin_open: true
+        tty: true
+
+        depends_on:
+            - postgres96
+
+        environment:
+            PGHOST: postgres96
+            PGPORT: 5432
+            PGUSER: shotgun_db_user
+            PGDATABASE: shotgun_db
+            PGOPTIONS: "-c statement_timeout=0"
+            PGPASSWORD: zcl.123
+
+        labels:
+            com.shotgunsoftware.component: dbops
+
+        volumes:
+            - /home/shotgun/db_backup:/db_backup
+
+
+
+    sg-transcoderserver:
+        container_name: Shotgun-TranscoderServer
+        
+        image: shotgun-transcoder-server:6.4.0
+        restart: unless-stopped
+
+        depends_on:
+            - postgres96
+
+        environment:
+            POSTGRES_HOST: postgres96
+            POSTGRES_DB: shotgun_transcoding
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: shotgun_db_user
+            POSTGRES_PASSWORD: zcl.123
+            DASHBOARD_USERNAME: admin
+            DASHBOARD_PASSWORD: admin
+
+        labels:
+            com.shotgunsoftware.component: transcoderserver
+        
+        #ports:
+        #    - "8008:80"
+
+
+    sg-transcoderworker:
+        container_name: Shotgun-TranscoderWorker
+        
+        image: shotgun-transcoder-worker:10.5.0
+        restart: unless-stopped
+        
+        depends_on:
+            - postgres96
+
+        environment:
+            #TRANSCODER_TRANSCODE_H264_VCODEC: -vcodec libx264 -pix_fmt yuv420p -vf 'scale=trunc((a*oh)/2)*2:1080' -g 30 -b:v 2000k -vprofile high -bf 0 -crf 26
+            #TRANSCODER_TRANSCODE_WEBM_VCODEC: -vcodec libvpx -vf 'scale=trunc((a*oh)/2)*2:1080' -g 30 -b:v 2000k -speed 1 -quality realtime -cpu-used 0 -qmin 10 -qmax 42
+            M_SCAN_ENABLED: 'false'
+            POSTGRES_HOST: postgres96
+            POSTGRES_DB: shotgun_transcoding
+            POSTGRES_PORT: 5432
+            POSTGRES_USER: shotgun
+            POSTGRES_PASSWORD: zcl.123
+        
+        labels:
+            com.shotgunsoftware.component: transcoderworker
+        
+        volumes:
+            - /home/shotgun/media:/media            
+            
+
+
 networks:
     extnetwork:
         driver: bridge
