@@ -397,7 +397,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.17
+                ipv4_address: 172.20.0.18
 
 
 
@@ -428,7 +428,7 @@ services:
             
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.18
+                ipv4_address: 172.20.0.19
 
 
 
