@@ -395,6 +395,11 @@ services:
         #ports:
         #    - "8008:80"
 
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.0.17
+
+
 
     sg-transcoderworker:
         container_name: Shotgun-TranscoderWorker
@@ -412,7 +417,7 @@ services:
             POSTGRES_HOST: postgres96
             POSTGRES_DB: shotgun_transcoding
             POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun
+            POSTGRES_USER: shotgun_db_user
             POSTGRES_PASSWORD: zcl.123
         
         labels:
@@ -421,6 +426,10 @@ services:
         volumes:
             - /home/shotgun/media:/media            
             
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.0.18
+
 
 
 networks:
