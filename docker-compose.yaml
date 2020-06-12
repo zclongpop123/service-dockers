@@ -335,8 +335,8 @@ services:
                 max-size: "2g"
                 max-file: "20"
         
-        ports:
-            - "9000:80"
+        #ports:
+        #    - "9000:80"
 
         networks:
             extnetwork:
@@ -368,6 +368,9 @@ services:
 
         volumes:
             - /home/shotgun/db_backup:/db_backup
+
+        networks:
+            - extnetwork
 
 
 
