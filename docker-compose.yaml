@@ -4,7 +4,7 @@ services:
     nginx:
         container_name: Nginx
         
-        image: nginx:alpine
+        image: nginx:stable-alpine
         restart: unless-stopped
         
         networks:
