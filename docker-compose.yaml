@@ -1,7 +1,24 @@
 version: '3'
 
 services:
-    
+    nginx:
+        container_name: Nginx
+        
+        image: nginx:alpine
+        restart: unless-stopped
+        
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.0.2
+        
+        volumes:
+            - /home/nginx/conf.d:/etc/nginx/conf.d
+        
+        ports:
+            - '80:80'
+            - '443:443'
+
+
     portainer:
         container_name: Portainer
         
@@ -10,7 +27,7 @@ services:
         
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.2
+                ipv4_address: 172.20.0.3
 
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
@@ -20,8 +37,6 @@ services:
         #    - '9000:9000'
 
 
-    
-    
     postgres96:
         container_name: Postgres96
 
@@ -30,7 +45,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.3
+                ipv4_address: 172.20.0.4
 
         volumes:
             - /home/postgresql/data:/var/lib/postgresql/data
@@ -42,7 +57,6 @@ services:
             - '5432:5432'
     
     
-    
     mongo:
         container_name: MongoDB
                 
@@ -51,7 +65,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.4
+                ipv4_address: 172.20.0.5
         
         environment:
             MONGO_INITDB_ROOT_USERNAME: root
@@ -63,25 +77,6 @@ services:
 
         ports:
             - '27017:27017'
-
-
-    nginx:
-        container_name: Nginx
-        
-        image: nginx:alpine
-        restart: unless-stopped
-        
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.0.5
-        
-        volumes:
-            - /home/nginx/conf.d:/etc/nginx/conf.d
-        
-        ports:
-            - '80:80'
-            - '443:443'
-
 
 
     jira:
@@ -110,7 +105,6 @@ services:
 
         #ports:
         #    - '8080:8080'
-
 
 
     confluence:
@@ -142,7 +136,6 @@ services:
             - '8091:8091'
 
 
-
     gitlab:
         container_name: Gitlab
 
@@ -151,7 +144,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.9
+                ipv4_address: 172.20.0.8
 
         volumes:
             - /home/gitlab/config:/etc/gitlab
@@ -172,7 +165,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.10
+                ipv4_address: 172.20.0.9
         
         volumes:
             - /home/rabbitmq/data:/var/lib/rabbitmq
@@ -185,7 +178,7 @@ services:
             - '5672:5672'
             - '15672:15672'
 
-    
+
     netdata:
         container_name: NetData
         
@@ -194,7 +187,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.11
+                ipv4_address: 172.20.0.10
         
         volumes:
             - /proc:/host/proc:ro
@@ -211,27 +204,6 @@ services:
         #    - '19999:19999'
 
 
-    mongo-express:
-        container_name: MongoExpress
-
-        image: mongo-express
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.0.12
-
-        environment:
-            ME_CONFIG_MONGODB_SERVER: mongo
-            ME_CONFIG_MONGODB_PORT: 27017
-            ME_CONFIG_MONGODB_ADMINUSERNAME: root
-            ME_CONFIG_MONGODB_ADMINPASSWORD: example
-
-        #ports:
-        #    - 8081:8081
-
-
-
     filebrowser:
         container_name: FileBrowser
 
@@ -240,7 +212,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.0.13
+                ipv4_address: 172.20.0.11
         
         volumes:
             - /home/filebrowser/data:/data
@@ -248,7 +220,7 @@ services:
 
         #ports:
         #    - 80:80
-        
+
 
     shotgun-event:
         container_name: Shotgun-Event
@@ -268,28 +240,6 @@ services:
         entrypoint: ["python", "/usr/src/app/src/shotgunEventDaemon.py", "foreground"]
 
 
-
-    shotgun-event-old:
-        container_name: Shotgun-Event-old
-
-        image: shotgun-event
-        restart: unless-stopped
-
-        networks:
-            - extnetwork
-
-        environment:
-            PYTHONPATH: /usr/src/app/site-packages
-
-        volumes:
-            - /home/pipeline/shotgunEvents_old:/usr/src/app
-            - /data/i:/data/i
-            - /data/w:/data/w
-
-        entrypoint: ["python", "/usr/src/app/src/shotgunEventDaemon.py", "foreground"]
-
-
-
     deadlinewebservice:
         container_name: DeadlineWebService
 
@@ -297,8 +247,7 @@ services:
         restart: unless-stopped
 
         networks:
-            extnetwork:
-                ipv4_address: 172.20.0.15
+            - extnetwork
 
         volumes:
             - /opt/Thinkbox/DeadlineRepository10:/mnt/DeadlineRepository10
@@ -307,152 +256,6 @@ services:
             - 8082:8082
 
         entrypoint: ["./deadlinewebservice"]
-
-
-
-    sg-memcached:
-        container_name: Shotgun-Memcached
-
-        image: memcached:1.4
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.0.16
-
-
-    sg-app:
-        container_name: Shotgun-App
-
-        image: shotgun-app:8.8.0.3275
-        restart: unless-stopped
-
-        environment:
-            SHOTGUN_SITE_URL: test-shotgun.ds.com
-            POSTGRES_HOST: postgres96
-            POSTGRES_DB: shotgun_db
-            POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun_db_user
-            POSTGRES_PASSWORD: zcl.123
-            MEMCACHED_HOST: sg-memcached
-            MEMCACHED_PORT: 11211
-
-        labels:
-            com.shotgunsoftware.component: app
-
-        volumes:
-            - /home/shotgun/media:/media
-            - /home/shotgun/rb:/var/rails/shotgun/current/script/rb
-
-        depends_on:
-            - sg-memcached
-            - postgres96
-
-        logging:
-            driver: "json-file"
-
-            options:
-                max-size: "2g"
-                max-file: "20"
-        
-        #ports:
-        #    - "9000:80"
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.0.17
-                aliases:
-                    - test-shotgun.ds.com
-
-
-    sg-dbops:
-        image: postgres:9.6
-
-        command: ["/bin/bash"]
-        stdin_open: true
-        tty: true
-
-        depends_on:
-            - postgres96
-
-        environment:
-            PGHOST: postgres96
-            PGPORT: 5432
-            PGUSER: shotgun_db_user
-            PGDATABASE: shotgun_db
-            PGOPTIONS: "-c statement_timeout=0"
-            PGPASSWORD: zcl.123
-
-        labels:
-            com.shotgunsoftware.component: dbops
-
-        volumes:
-            - /home/shotgun/db_backup:/db_backup
-
-        networks:
-            - extnetwork
-
-
-
-    sg-transcoderserver:
-        container_name: Shotgun-TranscoderServer
-        
-        image: shotgun-transcoder-server:6.4.0
-        restart: unless-stopped
-
-        depends_on:
-            - postgres96
-
-        environment:
-            POSTGRES_HOST: postgres96
-            POSTGRES_DB: shotgun_transcoding
-            POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun_db_user
-            POSTGRES_PASSWORD: zcl.123
-            DASHBOARD_USERNAME: admin
-            DASHBOARD_PASSWORD: admin
-
-        labels:
-            com.shotgunsoftware.component: transcoderserver
-        
-        #ports:
-        #    - "8008:80"
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.0.18
-
-
-
-    sg-transcoderworker:
-        container_name: Shotgun-TranscoderWorker
-        
-        image: shotgun-transcoder-worker:10.5.0
-        restart: unless-stopped
-        
-        depends_on:
-            - postgres96
-
-        environment:
-            #TRANSCODER_TRANSCODE_H264_VCODEC: -vcodec libx264 -pix_fmt yuv420p -vf 'scale=trunc((a*oh)/2)*2:1080' -g 30 -b:v 2000k -vprofile high -bf 0 -crf 26
-            #TRANSCODER_TRANSCODE_WEBM_VCODEC: -vcodec libvpx -vf 'scale=trunc((a*oh)/2)*2:1080' -g 30 -b:v 2000k -speed 1 -quality realtime -cpu-used 0 -qmin 10 -qmax 42
-            M_SCAN_ENABLED: 'false'
-            POSTGRES_HOST: postgres96
-            POSTGRES_DB: shotgun_transcoding
-            POSTGRES_PORT: 5432
-            POSTGRES_USER: shotgun_db_user
-            POSTGRES_PASSWORD: zcl.123
-        
-        labels:
-            com.shotgunsoftware.component: transcoderworker
-        
-        volumes:
-            - /home/shotgun/media:/media            
-            
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.0.19
-
 
 
 networks:
