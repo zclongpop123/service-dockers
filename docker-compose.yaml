@@ -263,7 +263,7 @@ services:
     shotgun-event:
         container_name: Shotgun-Event
 
-        image: shotgun-event
+        image: shotgun-events
         restart: unless-stopped
 
         networks:
@@ -273,15 +273,17 @@ services:
             PYTHONPATH: /usr/src/app/site-packages
 
         volumes:
-            - /home/pipeline/shotgunEvents:/usr/src/app
-
-        entrypoint: ["python", "/usr/src/app/src/shotgunEventDaemon.py", "foreground"]
+            - /home/pipeline/shotgunEvents/shotgunEventDaemon.conf:/usr/src/app/shotgunEvents/src/shotgunEventDaemon.conf
+            - /home/pipeline/shotgunEvents/site-packages:/usr/src/app/site-packages
+            - /home/pipeline/shotgunEvents/plugins:/usr/src/app/shotgunEvents/plugins
+            - /home/pipeline/shotgunEvents/logs:/usr/src/app/shotgunEvents/logs
+        
 
 
     shotgun-event-old:
         container_name: Shotgun-Event-old
 
-        image: shotgun-event
+        image: shotgun-events
         restart: unless-stopped
 
         networks:
@@ -291,7 +293,11 @@ services:
             PYTHONPATH: /usr/src/app/site-packages
 
         volumes:
-            - /home/pipeline/shotgunEvents_old:/usr/src/app
+            - /home/pipeline/shotgunEvents_old/shotgunEventDaemon.conf:/usr/src/app/shotgunEvents/src/shotgunEventDaemon.conf
+            - /home/pipeline/shotgunEvents_old/site-packages:/usr/src/app/site-packages
+            - /home/pipeline/shotgunEvents_old/plugins:/usr/src/app/shotgunEvents/plugins
+            - /home/pipeline/shotgunEvents_old/logs:/usr/src/app/shotgunEvents/logs
+
 
 
     deadlinewebservice:
