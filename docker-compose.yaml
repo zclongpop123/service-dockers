@@ -13,7 +13,7 @@ services:
         
         volumes:
             - /home/nginx/conf.d:/etc/nginx/conf.d
-            - /home/help:/home/help
+            - /home/documents:/home/documents
         
         ports:
             - '80:80'
@@ -23,7 +23,7 @@ services:
     portainer:
         container_name: Portainer
         
-        image: portainer/portainer:latest
+        image: portainer/portainer-ce:latest
         restart: unless-stopped
         
         networks:
@@ -38,10 +38,10 @@ services:
         #    - '9000:9000'
 
 
-    postgres96:
-        container_name: Postgres96
+    postgres10:
+        container_name: Postgres10
 
-        image: postgres:9.6-alpine
+        image: postgres:10-alpine
         restart: unless-stopped
 
         networks:
@@ -57,56 +57,6 @@ services:
         ports:
             - '5432:5432'
     
-    
-    mongo:
-        container_name: MongoDB
-                
-        image: mongo:latest
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.4
-        
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: root
-            MONGO_INITDB_ROOT_PASSWORD: example
-
-        volumes:
-            - /home/mongo/db:/data/db
-            - /home/mongo/configdb:/data/configdb
-
-        ports:
-            - '27017:27017'
-
-
-    jira:
-        container_name: Jira_ServiceDesk
-        user: '2001:2001'
-
-        image: atlassian/jira-servicedesk
-        restart: unless-stopped
-
-        depends_on:
-            - postgres96
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.5
-
-        volumes:
-            - /home/jira:/var/atlassian/application-data/jira
-
-        environment:
-            - JVM_MINIMUM_MEMORY=1024m
-            - JVM_MAXIMUM_MEMORY=16384m
-
-            - ATL_PROXY_NAME=jira.ds.com
-            - ATL_PROXY_PORT=80
-
-        #ports:
-        #    - '8080:8080'
-
 
     confluence:
         container_name: Confluence
@@ -115,21 +65,18 @@ services:
         image: confluence-server
         restart: unless-stopped
 
-        depends_on:
-            - postgres96
-
         networks:
             extnetwork:
-                ipv4_address: 172.20.1.6
+                ipv4_address: 172.20.1.4
 
         volumes:
             - /home/confluence:/var/atlassian/application-data/confluence
 
         environment:
             - JVM_MINIMUM_MEMORY=1024m
-            - JVM_MAXIMUM_MEMORY=16384m
+            - JVM_MAXIMUM_MEMORY=32768m
         
-            - ATL_PROXY_NAME=wiki.ds.com
+            - ATL_PROXY_NAME=wiki.zchd.com
             - ATL_PROXY_PORT=80
 
         ports:
@@ -145,7 +92,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.1.7
+                ipv4_address: 172.20.1.5
 
         volumes:
             - /home/gitlab/config:/etc/gitlab
@@ -158,165 +105,39 @@ services:
             #- '20443:443'
 
 
-    rabbitmq:
-        container_name: RabbitMQ
-        
-        image: rabbitmq:3.8.2-management
-        restart: unless-stopped
+#    grafana:
+#        container_name: Grafana
+#        user: '472:472'
+#
+#        image: grafana/grafana
+#        restart: unless-stopped
+#
+#        networks:
+#            extnetwork:
+#                ipv4_address: 172.20.1.6
+#        
+#        volumes:
+#            - /home/grafana:/var/lib/grafana
+#
+#        #ports:
+#        #    - 3000:3000
 
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.8
-        
-        volumes:
-            - /home/rabbitmq/data:/var/lib/rabbitmq
-
-        environment:
-            - RABBITMQ_DEFAULT_USER=admin
-            - RABBITMQ_DEFAULT_PASS=password
-
-        ports:
-            - '5672:5672'
-            - '15672:15672'
-
-
-    netdata:
-        container_name: NetData
-        
-        image: netdata/netdata
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.9
-        
-        volumes:
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-        
-        cap_add:
-            - SYS_PTRACE
-        
-        security_opt:
-            - apparmor:unconfined
-
-        #ports:
-        #    - '19999:19999'
-
-
-    filebrowser:
-        container_name: FileBrowser
-
-        image: filebrowser/filebrowser
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.10
-        
-        volumes:
-            - /mnt:/srv
-
-        #ports:
-        #    - 80:80
-
-
-    jenkins:
-        container_name: Jenkins
-        user: '1000:1000'
-
-        image: jenkins/jenkins:alpine
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.11
-
-        volumes:
-            - /home/jenkins:/var/jenkins_home
-
-        ports:
-            - '8080:8080'
-            - '5000:5000'
-
-
-
-    grafana:
-        container_name: Grafana
-        user: '472:472'
-
-        image: grafana/grafana
-        restart: unless-stopped
-
-        networks:
-            extnetwork:
-                ipv4_address: 172.20.1.12
-        
-        volumes:
-            - /home/grafana:/var/lib/grafana
-
-        #ports:
-        #    - 3000:3000
-
-
-    shotgun-event:
-        container_name: Shotgun-Event
-
-        image: shotgun-events
-        restart: unless-stopped
-
-        networks:
-            - extnetwork
-
-        environment:
-            PYTHONPATH: /usr/src/app/site-packages
-
-        volumes:
-            - /home/pipeline/shotgunEvents/shotgunEventDaemon.conf:/usr/src/app/shotgunEvents/src/shotgunEventDaemon.conf
-            - /home/pipeline/shotgunEvents/site-packages:/usr/src/app/site-packages
-            - /home/pipeline/shotgunEvents/plugins:/usr/src/app/shotgunEvents/plugins
-            - /home/pipeline/shotgunEvents/logs:/usr/src/app/shotgunEvents/logs
-        
-
-
-    shotgun-event-old:
-        container_name: Shotgun-Event-old
-
-        image: shotgun-events
-        restart: unless-stopped
-
-        networks:
-            - extnetwork
-
-        environment:
-            PYTHONPATH: /usr/src/app/site-packages
-
-        volumes:
-            - /home/pipeline/shotgunEvents_old/shotgunEventDaemon.conf:/usr/src/app/shotgunEvents/src/shotgunEventDaemon.conf
-            - /home/pipeline/shotgunEvents_old/site-packages:/usr/src/app/site-packages
-            - /home/pipeline/shotgunEvents_old/plugins:/usr/src/app/shotgunEvents/plugins
-            - /home/pipeline/shotgunEvents_old/logs:/usr/src/app/shotgunEvents/logs
-
-
-
-    deadlinewebservice:
-        container_name: DeadlineWebService
-
-        image: deadline-client
-        restart: unless-stopped
-
-        networks:
-            - extnetwork
-
-        volumes:
-            - /opt/Thinkbox/DeadlineRepository10:/mnt/DeadlineRepository10
-
-        ports:
-            - 8082:8082
-
-        entrypoint: ["./deadlinewebservice"]
-
+    
+#    prometheus:
+#        container_name: Prometheus
+#
+#        image: prom/prometheus
+#        restart: unless-stopped
+#
+#        networks:
+#            extnetwork:
+#                ipv4_address: 172.20.1.7
+#        
+#        volumes:
+#            - /home/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#
+#        ports:
+#            - 9090:9090
 
 
 
