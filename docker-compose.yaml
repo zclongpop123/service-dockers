@@ -13,8 +13,7 @@ services:
         
         volumes:
             - /home/nginx/conf.d:/etc/nginx/conf.d
-            - /home/documents:/home/documents
-        
+
         ports:
             - '80:80'
             - '443:443'
@@ -62,7 +61,7 @@ services:
         container_name: Confluence
         user: '2002:2002'
 
-        image: confluence-server
+        image: atlassian/confluence-server
         restart: unless-stopped
 
         networks:
@@ -78,6 +77,9 @@ services:
         
             - ATL_PROXY_NAME=wiki.zchd.com
             - ATL_PROXY_PORT=80
+            
+            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/confluence/atlassian-agent.jar ${JAVA_OPTS}"
+            #- JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.recovery.password=0o0o0o0o0o0o0o0000o0o"
 
         ports:
             - '8090:8090'
