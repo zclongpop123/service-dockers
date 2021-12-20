@@ -78,7 +78,7 @@ services:
             - ATL_PROXY_NAME=wiki.zchd.com
             - ATL_PROXY_PORT=80
             
-            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/confluence/atlassian-agent.jar ${JAVA_OPTS}"
+            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/confluence/atlassian-agent.jar"
             #- JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.recovery.password=0o0o0o0o0o0o0o0000o0o"
 
         ports:
