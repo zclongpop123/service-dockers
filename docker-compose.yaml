@@ -79,6 +79,7 @@ services:
             - ATL_PROXY_PORT=80
             
             - JAVA_OPTS="-javaagent:/var/atlassian/application-data/confluence/atlassian-agent.jar"
+            # 管理员密码丢失之后启用下面那行进入恢复模式 用户名 recovery_admin 密码 下面自定义
             #- JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.recovery.password=0o0o0o0o0o0o0o0000o0o"
 
         ports:
