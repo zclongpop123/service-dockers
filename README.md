@@ -56,7 +56,7 @@
       ├── gitlab
       └── ...
    ```
-   如果wiki 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
+   如果 confluence 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
    ```bash
    chown -R 2002:2002 /home/confluence 
    ```
