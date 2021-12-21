@@ -1,9 +1,9 @@
 使用说明
 ===
 
-- 安装 docker 并启动Docker服务
+- 安装 Docker 并启动 Docker 服务
   
-  详细参考 https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
+  详细步骤参考 https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
   ```bash
   dnf install -y yum-utils device-mapper-persistent-data lvm2 wget
   
