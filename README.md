@@ -3,7 +3,7 @@
 
 - 安装 docker 并启动Docker服务
   
-  https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
+  详细参考 https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
   ```bash
   dnf install -y yum-utils device-mapper-persistent-data lvm2 wget
   
