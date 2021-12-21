@@ -1,4 +1,4 @@
-How To Use
+使用说明
 ===
 
 - 安装 docker 并启动Docker服务
@@ -37,10 +37,13 @@ How To Use
   ```
 
 - 自己创建或者下载本仓库里的docke-compose.yml, 选择修改docker-compose.yaml里对应的域名
+  ```bash
+  git clone https://github.com/zclongpop123/service-dockers.git
+  ```
 
 - 运行镜像服务
   ```bash
-  docker-compose up -d
+  cd service-dockers && docker-compose up -d
   ```
   
  - 所有服务的数据默认挂载的 /home 下面的各自文件夹内，并且会自动生成。
