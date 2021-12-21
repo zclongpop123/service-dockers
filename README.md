@@ -10,7 +10,7 @@ How To Use
 
 - 安装 docker-compose
 
-  最新发布地址 https://github.com/docker/compose/releases
+  最新版本发布地址 https://github.com/docker/compose/releases
 
   ```bash
   sudo curl -L https://github.com/docker/compose/releases/download/2.2.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
@@ -36,15 +36,17 @@ How To Use
  - 所有服务的数据默认挂载的 /home 下面的各自文件夹内，并且会自动生成。
    ```
    /home
-      ├── confluence
-      ├── gitlab
-      ├── lost+found
       ├── nginx
       ├── portainer
       ├── postgresql
+      ├── confluence
+      ├── gitlab
       └── ...
    ```
  如果wiki 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
+ ```bash
+ chown -R 2002:2002 /home/confluence 
+ ```
  
  - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去，conf.d 为Nginx的配置，需要手动拷贝过去，conf.d 里的二级域名，然后重启Nginx或者重新加载Nginx配置
  ```
