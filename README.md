@@ -2,9 +2,19 @@ How To Use
 ===
 
 - 安装 docker 并启动Docker服务
-  ```bash
-  yum install docker -y
   
+  https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
+  ```bash
+  dnf install -y yum-utils device-mapper-persistent-data lvm2 wget
+  
+  wget -O /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
+  
+  sed -i 's+download.docker.com+mirrors.tuna.tsinghua.edu.cn/docker-ce+' /etc/yum.repos.d/docker-ce.repo
+  
+  dnf makecache
+  
+  dnf install docker-ce -y
+
   systemctl enable docker.service && systemctl start docker.service
   ```
 
