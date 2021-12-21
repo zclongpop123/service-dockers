@@ -61,7 +61,7 @@ services:
         container_name: Confluence
         user: '2002:2002'
 
-        image: atlassian/confluence-server
+        image: atlassian/confluence
         restart: unless-stopped
 
         networks:
