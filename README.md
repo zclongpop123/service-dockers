@@ -56,17 +56,17 @@
       ├── gitlab
       └── ...
    ```
- 如果wiki 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
- ```bash
- chown -R 2002:2002 /home/confluence 
- ```
+   如果wiki 或者 jira 启动失败，需要修改一下home下面对应文件夹的属主和属组，然后重启服务。
+   ```bash
+   chown -R 2002:2002 /home/confluence 
+   ```
  
  - 一些网页服务默认关闭里端口映射，通过 Nginx 转发过去，conf.d 为Nginx的配置，需要手动拷贝过去，conf.d 里的二级域名，然后重启Nginx或者重新加载Nginx配置
- ```
- docker-compose restart nginx
- ```
- 或者
- ```
- nginx -s reload
- ```
+   ```bash
+   docker-compose restart nginx
+   ```
+   或者
+   ```bash
+   nginx -s reload
+   ```
  
