@@ -1,40 +1,9 @@
 使用说明
 ===
 
-- 安装 Docker 并启动 Docker 服务
+- 安装 docker + docker-compose
   
-  详细步骤参考 https://mirrors.tuna.tsinghua.edu.cn/help/docker-ce/
-  ```bash
-  dnf install -y yum-utils device-mapper-persistent-data lvm2 wget
-  
-  wget -O /etc/yum.repos.d/docker-ce.repo https://download.docker.com/linux/centos/docker-ce.repo
-  
-  sed -i 's+download.docker.com+mirrors.tuna.tsinghua.edu.cn/docker-ce+' /etc/yum.repos.d/docker-ce.repo
-  
-  dnf makecache
-  
-  dnf install docker-ce -y
-
-  systemctl enable docker.service && systemctl start docker.service
-  ```
-
-- 安装 docker-compose
-
-  最新版本发布地址 https://github.com/docker/compose/releases
-
-  ```bash
-  curl -L https://github.com/docker/compose/releases/download/2.2.2/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-
-  chmod +x /usr/local/bin/docker-compose
-
-  ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-  ```
-
-- 检查 docker-compose
-
-  ```bash
-  docker-compose --version
-  ```
+  参考方法 https://github.com/zclongpop123/chinese-mirrors/blob/main/docker-ce.md
 
 - 自己创建或者下载本仓库里的docke-compose.yml, 选择修改docker-compose.yaml里对应的域名
   ```bash
