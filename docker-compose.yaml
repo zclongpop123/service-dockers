@@ -87,6 +87,35 @@ services:
             - '8091:8091'
 
 
+
+    crowd:
+        container_name: Crowd
+        user: '2004:2004'
+
+        image: atlassian/crowd
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.1.7
+
+        volumes:
+            - /home/crowd:/var/atlassian/application-data/crowd
+
+        environment:
+            - TZ=Asia/Shanghai
+
+            - JVM_MINIMUM_MEMORY=1024m
+            - JVM_MAXIMUM_MEMORY=4096m
+
+            - ATL_PROXY_NAME=crowd.camel.com
+            - ATL_PROXY_PORT=80
+
+            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/crowd/atlassian-agent.jar"
+        #ports:
+        #    - 8095:8095
+
+
     gitlab:
         container_name: Gitlab
 
