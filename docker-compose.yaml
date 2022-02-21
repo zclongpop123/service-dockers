@@ -37,7 +37,7 @@ services:
             - /home/portainer:/data
         
         environment:
-            - TZ: "Asia/Shanghai"
+            TZ: "Asia/Shanghai"
         
         #ports:
         #    - '9000:9000'
