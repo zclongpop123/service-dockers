@@ -172,6 +172,20 @@ services:
 #            - 9090:9090
 
 
+    watchtower:
+        container_name: WatchTower
+
+        image: containrrr/watchtower
+        restart: unless-stopped
+
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+
+        environment:
+            - TZ=Asia/Shanghai
+
+        command: --interval 10 Portainer Nginx NTP
+
 
 networks:
     extnetwork:
