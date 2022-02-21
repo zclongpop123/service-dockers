@@ -186,6 +186,9 @@ services:
 
         image: containrrr/watchtower
         restart: unless-stopped
+        
+        networks:
+            extnetwork
 
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
