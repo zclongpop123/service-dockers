@@ -15,7 +15,7 @@ services:
             - /home/nginx/conf.d:/etc/nginx/conf.d
        
         environment:
-            - TZ: "Asia/Shanghai"
+            TZ: "Asia/Shanghai"
         
         ports:
             - '80:80'
