@@ -72,6 +72,8 @@ services:
             - /home/confluence:/var/atlassian/application-data/confluence
 
         environment:
+            - TZ=Asia/Shanghai
+            
             - JVM_MINIMUM_MEMORY=1024m
             - JVM_MAXIMUM_MEMORY=32768m
         
