@@ -188,7 +188,7 @@ services:
         restart: unless-stopped
         
         networks:
-            extnetwork
+            - extnetwork
 
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
