@@ -196,7 +196,7 @@ services:
         environment:
             TZ: "Asia/Shanghai"
 
-        command: --interval 10 Portainer Nginx NTP
+        command: --schedule "0 0 1 * * *" Nginx Portainer Postgres10 Gitlab
 
 
 networks:
