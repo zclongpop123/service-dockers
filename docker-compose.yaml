@@ -112,7 +112,7 @@ services:
             - /home/crowd:/var/atlassian/application-data/crowd
 
         environment:
-            TZ: "Asia/Shanghai
+            TZ: "Asia/Shanghai"
 
             JVM_MINIMUM_MEMORY: "1024m"
             JVM_MAXIMUM_MEMORY: "4096m"
