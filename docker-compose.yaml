@@ -15,7 +15,7 @@ services:
             - /home/nginx/conf.d:/etc/nginx/conf.d
        
         environment:
-            - TZ=Asia/Shanghai
+            - TZ: "Asia/Shanghai"
         
         ports:
             - '80:80'
@@ -35,7 +35,10 @@ services:
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
             - /home/portainer:/data
-
+        
+        environment:
+            - TZ: "Asia/Shanghai"
+        
         #ports:
         #    - '9000:9000'
 
@@ -54,7 +57,8 @@ services:
             - /home/postgresql/data:/var/lib/postgresql/data
 
         environment:
-            POSTGRES_PASSWORD: password
+            - TZ: "Asia/Shanghai"
+            - POSTGRES_PASSWORD: password
 
         ports:
             - '5432:5432'
@@ -187,7 +191,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
 
         environment:
-            - TZ=Asia/Shanghai
+            - TZ: "Asia/Shanghai"
 
         command: --interval 10 Portainer Nginx NTP
 
