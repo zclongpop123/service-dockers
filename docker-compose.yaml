@@ -57,8 +57,8 @@ services:
             - /home/postgresql/data:/var/lib/postgresql/data
 
         environment:
-            - TZ: "Asia/Shanghai"
-            - POSTGRES_PASSWORD: password
+            TZ: "Asia/Shanghai"
+            POSTGRES_PASSWORD: "password"
 
         ports:
             - '5432:5432'
@@ -79,17 +79,17 @@ services:
             - /home/confluence:/var/atlassian/application-data/confluence
 
         environment:
-            - TZ=Asia/Shanghai
+            TZ: "Asia/Shanghai"
             
-            - JVM_MINIMUM_MEMORY=1024m
-            - JVM_MAXIMUM_MEMORY=32768m
+            JVM_MINIMUM_MEMORY: "1024m"
+            JVM_MAXIMUM_MEMORY: "32768m"
         
-            - ATL_PROXY_NAME=wiki.zchd.com
-            - ATL_PROXY_PORT=80
+            ATL_PROXY_NAME: "wiki.zchd.com"
+            ATL_PROXY_PORT: "80"
             
-            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/confluence/atlassian-agent.jar"
+            JAVA_OPTS: "-javaagent:/var/atlassian/application-data/confluence/atlassian-agent.jar"
             # 管理员密码丢失之后启用下面那行进入恢复模式 用户名 recovery_admin 密码 下面自定义
-            #- JVM_SUPPORT_RECOMMENDED_ARGS="-Datlassian.recovery.password=0o0o0o0o0o0o0o0000o0o"
+            #- JVM_SUPPORT_RECOMMENDED_ARGS: "-Datlassian.recovery.password=0o0o0o0o0o0o0o0000o0o"
 
         ports:
             - '8090:8090'
@@ -112,15 +112,15 @@ services:
             - /home/crowd:/var/atlassian/application-data/crowd
 
         environment:
-            - TZ=Asia/Shanghai
+            TZ: "Asia/Shanghai
 
-            - JVM_MINIMUM_MEMORY=1024m
-            - JVM_MAXIMUM_MEMORY=4096m
+            JVM_MINIMUM_MEMORY: "1024m"
+            JVM_MAXIMUM_MEMORY: "4096m"
 
-            - ATL_PROXY_NAME=crowd.camel.com
-            - ATL_PROXY_PORT=80
+            ATL_PROXY_NAME: "crowd.camel.com"
+            ATL_PROXY_PORT: "80"
 
-            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/crowd/atlassian-agent.jar"
+            JAVA_OPTS: "-javaagent:/var/atlassian/application-data/crowd/atlassian-agent.jar"
         #ports:
         #    - 8095:8095
 
@@ -191,7 +191,7 @@ services:
             - /var/run/docker.sock:/var/run/docker.sock
 
         environment:
-            - TZ: "Asia/Shanghai"
+            TZ: "Asia/Shanghai"
 
         command: --interval 10 Portainer Nginx NTP
 
