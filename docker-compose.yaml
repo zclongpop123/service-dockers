@@ -136,7 +136,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.1.7
+                ipv4_address: 172.20.1.6
 
         volumes:
             - /home/crowd:/var/atlassian/application-data/crowd
@@ -163,7 +163,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.1.8
+                ipv4_address: 172.20.1.7
 
         volumes:
             - /home/gitlab/config:/etc/gitlab
