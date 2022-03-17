@@ -96,6 +96,36 @@ services:
             - '8091:8091'
 
 
+    jira:
+        container_name: Jira
+        user: '2001:2001'
+
+        image: atlassian/jira-servicemanagement
+        restart: unless-stopped
+
+        networks:
+            extnetwork:
+                ipv4_address: 172.20.1.5
+
+        volumes:
+            - /home/jira:/var/atlassian/application-data/jira
+
+        environment:
+            - TZ=Asia/Shanghai
+
+            - JVM_MINIMUM_MEMORY=1024m
+            - JVM_MAXIMUM_MEMORY=8192m
+
+            - ATL_PROXY_NAME=jira.camel.com
+            - ATL_PROXY_PORT=80
+
+            - JAVA_OPTS="-javaagent:/var/atlassian/application-data/jira/atlassian-agent.jar"
+
+
+        #ports:
+            #- '8090:8090'
+            #- '8091:8091'
+
 
     crowd:
         container_name: Crowd
