@@ -163,7 +163,7 @@ services:
 
         networks:
             extnetwork:
-                ipv4_address: 172.20.1.5
+                ipv4_address: 172.20.1.8
 
         volumes:
             - /home/gitlab/config:/etc/gitlab
@@ -185,7 +185,7 @@ services:
 #
 #        networks:
 #            extnetwork:
-#                ipv4_address: 172.20.1.6
+#                ipv4_address: 172.20.1.9
 #        
 #        volumes:
 #            - /home/grafana:/var/lib/grafana
@@ -202,7 +202,7 @@ services:
 #
 #        networks:
 #            extnetwork:
-#                ipv4_address: 172.20.1.7
+#                ipv4_address: 172.20.1.10
 #        
 #        volumes:
 #            - /home/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
