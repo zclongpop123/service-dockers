@@ -41,6 +41,7 @@ services:
         
         #ports:
         #    - '9000:9000'
+        #    - '9443:9443'
 
 
     postgres10:
