@@ -11,8 +11,8 @@ services:
             extnetwork:
                 ipv4_address: 172.20.1.1
         
-        volumes:
-            - /home/nginx/conf.d:/etc/nginx/conf.d
+        #volumes:
+        #    - /home/nginx/conf.d:/etc/nginx/conf.d
        
         environment:
             TZ: "Asia/Shanghai"
@@ -44,10 +44,10 @@ services:
         #    - '9443:9443'
 
 
-    postgres10:
-        container_name: Postgres10
+    postgres:
+        container_name: Postgres14
 
-        image: postgres:10-alpine
+        image: postgres:14-alpine
         restart: unless-stopped
 
         networks:
@@ -227,7 +227,7 @@ services:
         environment:
             TZ: "Asia/Shanghai"
 
-        command: --schedule "0 0 1 * * *" Nginx Portainer Postgres10 Gitlab
+        command: --schedule "0 0 1 * * *" Nginx Portainer Gitlab
 
 
 networks:
